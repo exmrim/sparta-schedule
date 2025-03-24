@@ -2,14 +2,8 @@ package com.example.scheduleproject.service;
 
 import com.example.scheduleproject.dto.*;
 import com.example.scheduleproject.entity.Schedule;
-import com.example.scheduleproject.entity.User;
 import com.example.scheduleproject.repository.ScheduleRepository;
 import exception.InvalidHandler;
-import org.springframework.cglib.core.Local;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +24,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto) {
 
-        //invalidException(scheduleRequestDto);
-
         Schedule schedule = new Schedule(scheduleRequestDto.getTitle(), scheduleRequestDto.getContents(), scheduleRequestDto.getUser_name(), scheduleRequestDto.getUser_id(), scheduleRequestDto.getUser_pw(), scheduleRequestDto.getCreate_date(), scheduleRequestDto.getUpdate_date());
+
+        invalidException(schedule);
 
         return scheduleRepository.saveSchedule(schedule);
 
@@ -46,6 +40,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto findScheduleById(Long id, Long inputId) {
 
+        //삭제된 정보
         checkScheduleException(id, inputId);
 
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
@@ -55,6 +50,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto findScheduleByUser(String user) {
 
+        //잘못된 정보
         checkUserException(user);
 
         Schedule schedule = scheduleRepository.findScheduleByUserOrElseThrow(user);
@@ -130,11 +126,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         return true;
     }
 
-    public boolean invalidException(ScheduleRequestDto scheduleRequestDto) {
-        String contents = saveSchedule(scheduleRequestDto).getContents();
+    public boolean invalidException(Schedule schedule) {
+
+        String contents = schedule.getContents();
 
         if(contents == null) {
             throw new InvalidHandler("ContentsNull","Contents are null.");
+        } else if(contents.equals("")) {
+            throw new InvalidHandler("ContentsEmpty","Contents are required.");
         } else if(contents.length() > 20) {
             throw new InvalidHandler("ContentsNull","Contents are too long.");
         }
