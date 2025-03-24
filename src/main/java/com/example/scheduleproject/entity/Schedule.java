@@ -16,26 +16,26 @@ public class Schedule {
     private Long id;
     private String title;
     private String contents;
-    private String user_id;
-    private String user_pw;
-    private String user_name;
+    private String userId;
+    private String userPw;
+    private String userName;
 
-    private LocalDateTime create_date;
-    private LocalDateTime update_date;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
-    public Schedule(String title, String contents, String user_name, String user_id, String user_pw, LocalDateTime create_date, LocalDateTime update_date) {
+    public Schedule(String title, String contents, String userName, String userId, String userPw, LocalDateTime createDate, LocalDateTime updateDate) {
         this.title = title;
         this.contents = contents;
-        this.user_name = user_name;
-        this.user_id = user_id;
-        this.user_pw = user_pw;
-        this.create_date = LocalDateTime.now();
-        this.update_date = LocalDateTime.now();
+        this.userName = userName;
+        this.userId = userId;
+        this.userPw = userPw;
+        this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
     }
 
-    public void update(String contents, String user_name) {
+    public void update(String contents, String userName) {
         this.contents = contents;
-        this.user_name = user_name;
+        this.userName = userName;
     }
 
 }

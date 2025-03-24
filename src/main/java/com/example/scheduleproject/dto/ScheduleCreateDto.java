@@ -1,35 +1,31 @@
 package com.example.scheduleproject.dto;
 
-import com.example.scheduleproject.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
-
 public class ScheduleCreateDto {
 
     private Long id;
     private String title;
     private String contents;
-    private String user_id;
-    private String user_pw;
-    private String user_name;
+    private String userId;
+    private String userPw;
+    private String userName;
 
-    private LocalDate create_date;
-    private LocalDate update_date;
+    private LocalDate createDate;
+    private LocalDate updateDate;
 
-    public ScheduleCreateDto(Long id, String title, String contents, String user_id, String user_pw, String user_name, LocalDate create_date, LocalDate update_date){
+    public ScheduleCreateDto(Long id, String title, String contents, String userId, String userPw, String userName, LocalDate createDate, LocalDate updateDate){
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.user_id = user_id;
-        this.user_pw = user_pw;
-        this.user_name = user_name;
-        this.create_date = LocalDate.now();
-        this.update_date = LocalDate.now();
+        this.userId = userId;
+        this.userPw = userPw;
+        this.userName = userName;
+        this.createDate = LocalDate.now();
+        this.updateDate = LocalDate.now();
     }
 
 }

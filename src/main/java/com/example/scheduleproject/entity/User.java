@@ -10,28 +10,28 @@ import java.time.LocalDateTime;
 public class User {
 
     private String id;
-    private String user_id;
-    private String user_pw;
-    private String user_name;
-    private String user_email;
+    private String userId;
+    private String userPw;
+    private String userName;
+    private String userEmail;
     private int age;
     private String job;
 
-    private LocalDateTime create_date;
-    private LocalDateTime update_date;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public User(
-            String user_id, String user_pw, String user_name, String user_email,
-            int age, String job, LocalDateTime create_date, LocalDateTime update_date)
+            String userId, String userPw, String userName, String userEmail,
+            int age, String job, LocalDateTime createDate, LocalDateTime updateDate)
     {
-        this.user_id = user_id;
-        this.user_pw = user_pw;
-        this.user_name = user_name;
-        this.user_email = user_email;
+        this.userId = userId;
+        this.userPw = userPw;
+        this.userName = userName;
+        this.userEmail = userEmail;
         this.age = age;
         this.job = job;
-        this.create_date = LocalDateTime.now();
-        this.update_date = LocalDateTime.now();
+        this.createDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
     }
 
 }

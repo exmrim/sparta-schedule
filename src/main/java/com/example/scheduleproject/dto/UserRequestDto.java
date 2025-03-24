@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 public class UserRequestDto {
 
     private String id;
-    private String user_id;
-    private String user_pw;
-    private String user_name;
-    private String user_email;
+    private String userId;
+    private String userPw;
+    private String userName;
+    private String userEmail;
     private int age;
     private String job;
-    private LocalDateTime create_date;
-    private LocalDateTime update_date;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 }

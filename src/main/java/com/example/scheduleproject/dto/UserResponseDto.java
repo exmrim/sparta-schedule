@@ -11,25 +11,25 @@ import java.time.LocalDateTime;
 public class UserResponseDto {
 
     private String id;
-    private String user_id;
-    private String user_pw;
-    private String user_name;
-    private String user_email;
+    private String userId;
+    private String userPw;
+    private String userName;
+    private String userEmail;
     private int age;
     private String job;
 
-    private LocalDateTime create_date;
-    private LocalDateTime update_date;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public UserResponseDto(User user) {
         this.id = user.getId();
-        this.user_id = user.getUser_id();
-        this.user_pw = user.getUser_pw();
-        this.user_name = user.getUser_name();
-        this.user_email = user.getUser_email();
+        this.userId = user.getUserId();
+        this.userPw = user.getUserPw();
+        this.userName = user.getUserName();
+        this.userEmail = user.getUserEmail();
         this.age = user.getAge();
         this.job = user.getJob();
-        this.create_date = user.getCreate_date();
-        this.update_date = user.getUpdate_date();
+        this.createDate = user.getCreateDate();
+        this.updateDate = user.getUpdateDate();
     }
 }
