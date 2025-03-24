@@ -1,16 +1,12 @@
 package com.example.scheduleproject.repository;
 
 import com.example.scheduleproject.dto.UserResponseDto;
-import com.example.scheduleproject.entity.Schedule;
 import com.example.scheduleproject.entity.User;
-import com.example.scheduleproject.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -35,18 +31,18 @@ public class JdbcTemplateUserRepository implements UserRepository {
         String uuid = UUID.randomUUID().toString();
 
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("user_id", user.getUser_id());
-        parameters.put("user_pw", user.getUser_pw());
-        parameters.put("user_name", user.getUser_name());
-        parameters.put("user_email", user.getUser_email());
+        parameters.put("user_id", user.getUserId());
+        parameters.put("user_pw", user.getUserPw());
+        parameters.put("user_name", user.getUserName());
+        parameters.put("user_email", user.getUserEmail());
         parameters.put("age", user.getAge());
         parameters.put("job", user.getJob());
-        parameters.put("create_date", user.getCreate_date());
-        parameters.put("update_date", user.getUpdate_date());
+        parameters.put("create_date", user.getCreateDate());
+        parameters.put("update_date", user.getUpdateDate());
 
         insert.execute(new MapSqlParameterSource(parameters));
 
-        return new UserResponseDto(uuid, user.getUser_id(), user.getUser_pw(), user.getUser_name(), user.getUser_email(), user.getAge(), user.getJob(), user.getCreate_date(), user.getUpdate_date());
+        return new UserResponseDto(uuid, user.getUserId(), user.getUserPw(), user.getUserName(), user.getUserEmail(), user.getAge(), user.getJob(), user.getCreateDate(), user.getUpdateDate());
 
     }
 

@@ -36,8 +36,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
 
-        User user = userRepository.findByIdOrElseThrow(schedule.getUser_id())
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + schedule.getUser_id()));
+        User user = userRepository.findByIdOrElseThrow(schedule.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + schedule.getUserId()));
 
         SimpleJdbcInsert insert = new SimpleJdbcInsert(this.jdbcTemplate);
         insert.withTableName("schedule").usingGeneratedKeyColumns("id");
@@ -45,15 +45,15 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", schedule.getTitle());
         parameters.put("contents", schedule.getContents());
-        parameters.put("user_name", schedule.getUser_name());
+        parameters.put("user_name", schedule.getUserName());
         parameters.put("user_id", user.getId());
-        parameters.put("user_pw", schedule.getUser_pw());
-        parameters.put("create_date", schedule.getCreate_date());
-        parameters.put("update_date", schedule.getUpdate_date());
+        parameters.put("user_pw", schedule.getUserPw());
+        parameters.put("create_date", schedule.getCreateDate());
+        parameters.put("update_date", schedule.getUpdateDate());
 
         Number key = insert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return new ScheduleResponseDto(key.longValue(), schedule.getTitle(), schedule.getContents(), schedule.getUser_id(), schedule.getUser_pw(), schedule.getUser_name(), schedule.getCreate_date(), schedule.getUpdate_date());
+        return new ScheduleResponseDto(key.longValue(), schedule.getTitle(), schedule.getContents(), schedule.getUserId(), schedule.getUserPw(), schedule.getUserName(), schedule.getCreateDate(), schedule.getUpdateDate());
     }
 
     @Override

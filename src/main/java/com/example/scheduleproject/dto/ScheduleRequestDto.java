@@ -21,5 +21,5 @@ public class ScheduleRequestDto {
     private String userPw;
     private String userName;
     private LocalDateTime createDate;
-    private LocalDateTime updateUpdate;
+    private LocalDateTime updateDate;
 }

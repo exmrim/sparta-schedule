@@ -19,7 +19,7 @@ public interface ScheduleRepository {
 
     Schedule checkPw(Long id);
 
-    int updateSchedule(Long id, String contents, String user_name);
+    int updateSchedule(Long id, String contents, String userName);
 
     int deleteSchedule(Long id);
 }

@@ -23,7 +23,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto) {
 
-        Schedule schedule = new Schedule(scheduleRequestDto.getTitle(), scheduleRequestDto.getContents(), scheduleRequestDto.getUser_name(), scheduleRequestDto.getUser_id(), scheduleRequestDto.getUser_pw(), scheduleRequestDto.getCreate_date(), scheduleRequestDto.getUpdate_date());
+        Schedule schedule = new Schedule(scheduleRequestDto.getTitle(), scheduleRequestDto.getContents(), scheduleRequestDto.getUserName(), scheduleRequestDto.getUserId(), scheduleRequestDto.getUserPw(), scheduleRequestDto.getCreateDate(), scheduleRequestDto.getUpdateDate());
 
         invalidException(schedule);
 
@@ -95,7 +95,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     public boolean checkUserException(String user) {
-        String userId = findScheduleByUser(user).getUser_id();
+        String userId = findScheduleByUser(user).getUserId();
 
         if(userId == null) {
             throw new InvalidHandler("UserNull","User not found.");
@@ -104,7 +104,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     public boolean checkPwException(Long id, String inputPw) {
-        String userPw = checkPw(id).getUser_pw();
+        String userPw = checkPw(id).getUserPw();
 
         if(userPw == null) {
             throw new InvalidHandler("UserPasswordNull","User Password not found.");
