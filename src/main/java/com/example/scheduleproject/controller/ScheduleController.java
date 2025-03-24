@@ -1,7 +1,6 @@
 package com.example.scheduleproject.controller;
 
-import com.example.scheduleproject.dto.ScheduleRequestDto;
-import com.example.scheduleproject.dto.ScheduleResponseDto;
+import com.example.scheduleproject.dto.*;
 import com.example.scheduleproject.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +23,9 @@ public class ScheduleController {
      * @param scheduleRequestDto
      * @return
      */
-    @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+    @PostMapping()
+    public ResponseEntity<ScheduleResponseDto> createSchedule(
+            @RequestBody ScheduleRequestDto scheduleRequestDto) {
         return new ResponseEntity<>(scheduleService.saveSchedule(scheduleRequestDto), HttpStatus.CREATED);
     }
 
@@ -34,10 +34,16 @@ public class ScheduleController {
         return scheduleService.findAllSchedules();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id) {
         return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
     }
+
+    @GetMapping("/user/{user}")
+    public ResponseEntity<ScheduleResponseDto> findScheduleByUser(@PathVariable String user) {
+        return new ResponseEntity<>(scheduleService.findScheduleByUser(user), HttpStatus.OK);
+    }
+
 
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(

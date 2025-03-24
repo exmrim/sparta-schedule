@@ -1,7 +1,6 @@
 package com.example.scheduleproject.service;
 
-import com.example.scheduleproject.dto.ScheduleRequestDto;
-import com.example.scheduleproject.dto.ScheduleResponseDto;
+import com.example.scheduleproject.dto.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +12,8 @@ public interface ScheduleService {
     List<ScheduleResponseDto> findAllSchedules();
 
     ScheduleResponseDto findScheduleById(Long id);
+
+    ScheduleResponseDto findScheduleByUser(String user);
 
     ScheduleResponseDto checkPw(Long id);
 

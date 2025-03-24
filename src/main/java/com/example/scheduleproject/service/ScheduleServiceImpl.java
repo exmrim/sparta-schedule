@@ -1,8 +1,8 @@
 package com.example.scheduleproject.service;
 
-import com.example.scheduleproject.dto.ScheduleRequestDto;
-import com.example.scheduleproject.dto.ScheduleResponseDto;
+import com.example.scheduleproject.dto.*;
 import com.example.scheduleproject.entity.Schedule;
+import com.example.scheduleproject.entity.User;
 import com.example.scheduleproject.repository.ScheduleRepository;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
@@ -39,6 +39,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+        return new ScheduleResponseDto(schedule);
+    }
+
+    @Override
+    public ScheduleResponseDto findScheduleByUser(String user) {
+        Schedule schedule = scheduleRepository.findScheduleByUserOrElseThrow(user);
         return new ScheduleResponseDto(schedule);
     }
 

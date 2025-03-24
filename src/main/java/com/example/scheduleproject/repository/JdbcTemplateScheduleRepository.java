@@ -1,7 +1,10 @@
 package com.example.scheduleproject.repository;
 
+import com.example.scheduleproject.dto.ScheduleCreateDto;
 import com.example.scheduleproject.dto.ScheduleResponseDto;
+import com.example.scheduleproject.dto.UserResponseDto;
 import com.example.scheduleproject.entity.Schedule;
+import com.example.scheduleproject.entity.User;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +30,20 @@ import java.util.Optional;
 public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final UserRepository userRepository;
 
-    public JdbcTemplateScheduleRepository(DataSource dataSource) {
+
+    public JdbcTemplateScheduleRepository(DataSource dataSource, UserRepository userRepository) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.userRepository = userRepository;
     }
 
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
+
+        User user = userRepository.findByIdOrElseThrow(schedule.getUser_id())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + schedule.getUser_id()));
+
         SimpleJdbcInsert insert = new SimpleJdbcInsert(this.jdbcTemplate);
         insert.withTableName("schedule").usingGeneratedKeyColumns("id");
 
@@ -41,7 +51,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         parameters.put("title", schedule.getTitle());
         parameters.put("contents", schedule.getContents());
         parameters.put("user_name", schedule.getUser_name());
-        parameters.put("user_id", schedule.getUser_id());
+        parameters.put("user_id", user.getId());
         parameters.put("user_pw", schedule.getUser_pw());
         parameters.put("create_date", schedule.getCreate_date());
         parameters.put("update_date", schedule.getUpdate_date());
@@ -70,6 +80,13 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         List<Schedule> result = jdbcTemplate.query("select * from schedule where id=?", scheduleRowMapperV2(), id);
 
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule id not found, id = " + id));
+    }
+
+    @Override
+    public Schedule findScheduleByUserOrElseThrow(String user) {
+        List<Schedule> result = jdbcTemplate.query("select * from schedule s join user u on s.user_id = u.id where u.user_id = ?", scheduleRowMapperV2(), user);
+
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule user not found, user = " + user));
     }
 
     @Override
