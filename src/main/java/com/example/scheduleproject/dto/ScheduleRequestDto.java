@@ -19,7 +19,7 @@ public class ScheduleRequestDto {
     private String contents;
     private String userId;
     private String userPw;
-    private String userNamee;
+    private String userName;
     private LocalDateTime createDate;
     private LocalDateTime updateUpdate;
 }

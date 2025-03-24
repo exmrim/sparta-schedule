@@ -57,7 +57,7 @@ public class ScheduleController {
             @PathVariable Long id,
             @Valid @RequestBody ScheduleRequestDto scheduleRequestDto
     ) {
-        return new ResponseEntity<>(scheduleService.updateSchedule(id, scheduleRequestDto.getContents(), scheduleRequestDto.getUser_name(), scheduleRequestDto.getUser_pw()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, scheduleRequestDto.getContents(), scheduleRequestDto.getUserName(), scheduleRequestDto.getUserPw()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -65,7 +65,7 @@ public class ScheduleController {
             @PathVariable Long id,
             @RequestBody ScheduleRequestDto scheduleRequestDto
     ) {
-        scheduleService.deleteSchedule(id, scheduleRequestDto.getUser_pw());
+        scheduleService.deleteSchedule(id, scheduleRequestDto.getUserPw());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
