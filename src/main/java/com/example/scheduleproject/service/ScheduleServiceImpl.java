@@ -4,7 +4,12 @@ import com.example.scheduleproject.dto.*;
 import com.example.scheduleproject.entity.Schedule;
 import com.example.scheduleproject.entity.User;
 import com.example.scheduleproject.repository.ScheduleRepository;
+import exception.InvalidHandler;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +30,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto) {
 
+        //invalidException(scheduleRequestDto);
+
         Schedule schedule = new Schedule(scheduleRequestDto.getTitle(), scheduleRequestDto.getContents(), scheduleRequestDto.getUser_name(), scheduleRequestDto.getUser_id(), scheduleRequestDto.getUser_pw(), scheduleRequestDto.getCreate_date(), scheduleRequestDto.getUpdate_date());
 
         return scheduleRepository.saveSchedule(schedule);
@@ -37,32 +44,28 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ScheduleResponseDto findScheduleById(Long id) {
+    public ScheduleResponseDto findScheduleById(Long id, Long inputId) {
+
+        checkScheduleException(id, inputId);
+
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
         return new ScheduleResponseDto(schedule);
     }
 
     @Override
     public ScheduleResponseDto findScheduleByUser(String user) {
-        Schedule schedule = scheduleRepository.findScheduleByUserOrElseThrow(user);
-        return new ScheduleResponseDto(schedule);
-    }
 
-    @Override
-    public ScheduleResponseDto checkPw(Long id) {
-        Schedule schedule = scheduleRepository.checkPw(id);
+        checkUserException(user);
+
+        Schedule schedule = scheduleRepository.findScheduleByUserOrElseThrow(user);
         return new ScheduleResponseDto(schedule);
     }
 
     @Transactional
     @Override
-    public ScheduleResponseDto updateSchedule(Long id, String contents, String user_name) {
+    public ScheduleResponseDto updateSchedule(Long id, String contents, String user_name, String user_pw) {
 
-        String result = checkPw(id).getUser_pw();
-
-        if(result == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Password not found.");
-        }
+        checkPwException(id, user_pw);
 
         if(contents == null || user_name == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The contents and name are required values.");
@@ -78,19 +81,64 @@ public class ScheduleServiceImpl implements ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
-    public void deleteSchedule(Long id) {
+    @Override
+    public void deleteSchedule(Long id, String user_pw) {
 
-        String result = checkPw(id).getUser_pw();
-
-        if(result == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Password not found.");
-        }
+        checkPwException(id, user_pw);
 
         int deleteRow = scheduleRepository.deleteSchedule(id);
 
         if(deleteRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule id not found. id = " + id);
         }
+    }
+
+    @Override
+    public ScheduleResponseDto checkPw(Long id) {
+        Schedule schedule = scheduleRepository.checkPw(id);
+        return new ScheduleResponseDto(schedule);
+    }
+
+    public boolean checkUserException(String user) {
+        String userId = findScheduleByUser(user).getUser_id();
+
+        if(userId == null) {
+            throw new InvalidHandler("UserNull","User not found.");
+        }
+        return true;
+    }
+
+    public boolean checkPwException(Long id, String inputPw) {
+        String userPw = checkPw(id).getUser_pw();
+
+        if(userPw == null) {
+            throw new InvalidHandler("UserPasswordNull","User Password not found.");
+        } else if(!userPw.equals(inputPw)) {
+            throw new InvalidHandler("UserPasswordMatch","Password does not match.");
+        }
+        return true;
+    }
+
+    public boolean checkScheduleException(Long id, Long inputId) {
+        Long num = findAllSchedules().get(0).getId();
+
+        if(num == null) {
+            throw new InvalidHandler("ScheduleNull","Schedule not found.");
+        } else if(num > inputId) {
+            throw new InvalidHandler("ScheduleDelete","Schedule is deleted.");
+        }
+        return true;
+    }
+
+    public boolean invalidException(ScheduleRequestDto scheduleRequestDto) {
+        String contents = saveSchedule(scheduleRequestDto).getContents();
+
+        if(contents == null) {
+            throw new InvalidHandler("ContentsNull","Contents are null.");
+        } else if(contents.length() > 20) {
+            throw new InvalidHandler("ContentsNull","Contents are too long.");
+        }
+        return true;
     }
 
 }

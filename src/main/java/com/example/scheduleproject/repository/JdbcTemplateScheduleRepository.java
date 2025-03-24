@@ -1,30 +1,24 @@
 package com.example.scheduleproject.repository;
 
-import com.example.scheduleproject.dto.ScheduleCreateDto;
 import com.example.scheduleproject.dto.ScheduleResponseDto;
-import com.example.scheduleproject.dto.UserResponseDto;
 import com.example.scheduleproject.entity.Schedule;
 import com.example.scheduleproject.entity.User;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
 
 @Repository
 public class JdbcTemplateScheduleRepository implements ScheduleRepository {
