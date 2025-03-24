@@ -22,6 +22,11 @@ public class JdbcTemplateUserRepository implements UserRepository {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /**
+     * 사용자 등록
+     * @param user
+     * @return
+     */
     @Override
     public UserResponseDto saveUser(User user) {
 
@@ -46,6 +51,11 @@ public class JdbcTemplateUserRepository implements UserRepository {
 
     }
 
+    /**
+     * 사용자 id 조회
+     * @param userId
+     * @return
+     */
     @Override
     public Optional<User> findByIdOrElseThrow(String userId) {
         List<User> result = jdbcTemplate.query("select * from user where user_id=?", userRowMapperV2(), userId);
@@ -53,6 +63,10 @@ public class JdbcTemplateUserRepository implements UserRepository {
         return result.stream().findAny();
         }
 
+    /**
+     * mapper
+     * @return
+     */
     private RowMapper<User> userRowMapperV2() {
         return new RowMapper<User>() {
 

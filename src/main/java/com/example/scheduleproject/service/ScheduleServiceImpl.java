@@ -20,6 +20,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
+    /**
+     * 일정 등록
+     * @param scheduleRequestDto
+     * @return
+     */
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto) {
 
@@ -31,11 +36,21 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     }
 
+    /**
+     * 일정 목록 조회
+     * @return
+     */
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
         return scheduleRepository.findAllSchedules();
     }
 
+    /**
+     * 일정 id에 따른 일정 조회
+     * @param id
+     * @param inputId
+     * @return
+     */
     @Override
     public ScheduleResponseDto findScheduleById(Long id, Long inputId) {
 
@@ -46,6 +61,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
+    /**
+     * 사용자 id에 따른 일정 조회
+     * @param user
+     * @return
+     */
     @Override
     public ScheduleResponseDto findScheduleByUser(String user) {
 
@@ -56,6 +76,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
+    /**
+     * 일정 수정
+     * @param id
+     * @param contents
+     * @param user_name
+     * @param user_pw
+     * @return
+     */
     @Transactional
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String contents, String user_name, String user_pw) {
@@ -76,6 +104,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
+    /**
+     * 일정 삭제
+     * @param id
+     * @param user_pw
+     */
     @Override
     public void deleteSchedule(Long id, String user_pw) {
 
@@ -88,12 +121,22 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
     }
 
+    /**
+     * 비밀번호 가져오기
+     * @param id
+     * @return
+     */
     @Override
     public ScheduleResponseDto checkPw(Long id) {
         Schedule schedule = scheduleRepository.checkPw(id);
         return new ScheduleResponseDto(schedule);
     }
 
+    /**
+     * 잘못된 정보(사용자) 예외 처리
+     * @param user
+     * @return
+     */
     public boolean checkUserException(String user) {
         String userId = findScheduleByUser(user).getUserId();
 
@@ -103,6 +146,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         return true;
     }
 
+    /**
+     * 비밀번호 확인 예외처리
+     * @param id
+     * @param inputPw
+     * @return
+     */
     public boolean checkPwException(Long id, String inputPw) {
         String userPw = checkPw(id).getUserPw();
 
@@ -114,6 +163,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         return true;
     }
 
+    /**
+     * 삭제되지 않은 일정 예외처리
+     * @param id
+     * @param inputId
+     * @return
+     */
     public boolean checkScheduleException(Long id, Long inputId) {
         Long num = findAllSchedules().get(0).getId();
 
@@ -125,6 +180,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         return true;
     }
 
+    /**
+     * 유효성 검사
+     * @param schedule
+     * @return
+     */
     public boolean invalidException(Schedule schedule) {
 
         String contents = schedule.getContents();

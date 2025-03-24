@@ -19,7 +19,6 @@ public class Schedule {
     private String userId;
     private String userPw;
     private String userName;
-
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 

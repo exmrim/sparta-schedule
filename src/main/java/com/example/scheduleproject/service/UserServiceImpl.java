@@ -15,6 +15,11 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * 사용자 등록
+     * @param userRequestDto
+     * @return
+     */
     @Override
     public UserResponseDto saveUser(UserRequestDto userRequestDto) {
 

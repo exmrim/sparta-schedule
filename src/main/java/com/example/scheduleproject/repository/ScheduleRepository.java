@@ -11,8 +11,6 @@ public interface ScheduleRepository {
 
     List<ScheduleResponseDto> findAllSchedules();
 
-    //Optional<Schedule> findScheduleById(Long id);
-
     Schedule findScheduleByIdOrElseThrow(Long id);
 
     Schedule findScheduleByUserOrElseThrow(String user);

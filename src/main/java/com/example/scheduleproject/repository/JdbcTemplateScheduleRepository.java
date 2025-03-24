@@ -33,9 +33,15 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         this.userRepository = userRepository;
     }
 
+    /**
+     * 일정 등록
+     * @param schedule
+     * @return
+     */
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
 
+        //user id 조회
         User user = userRepository.findByIdOrElseThrow(schedule.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + schedule.getUserId()));
 
@@ -56,20 +62,20 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return new ScheduleResponseDto(key.longValue(), schedule.getTitle(), schedule.getContents(), schedule.getUserId(), schedule.getUserPw(), schedule.getUserName(), schedule.getCreateDate(), schedule.getUpdateDate());
     }
 
+    /**
+     * 일정 목록 조회
+     * @return
+     */
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
         return jdbcTemplate.query("select * from schedule order by update_date, user_name desc", scheduleRowMapper());
     }
 
-    /*
-    @Override
-    public Optional<Schedule> findScheduleById(Long id) {
-        List<Schedule> result = jdbcTemplate.query("select * from schedule where id=?", scheduleRowMapperV2(), id);
-
-        return result.stream().findAny();
-    }
-    */
-
+    /**
+     * 일정 id에 따른 일정 조회
+     * @param id
+     * @return
+     */
     @Override
     public Schedule findScheduleByIdOrElseThrow(Long id) {
         List<Schedule> result = jdbcTemplate.query("select * from schedule where id=?", scheduleRowMapperV2(), id);
@@ -77,6 +83,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule id not found, id = " + id));
     }
 
+    /**
+     * 사용자 id에 따른 일정 조회
+     * @param user
+     * @return
+     */
     @Override
     public Schedule findScheduleByUserOrElseThrow(String user) {
         List<Schedule> result = jdbcTemplate.query("select * from schedule s join user u on s.user_id = u.id where u.user_id = ?", scheduleRowMapperV2(), user);
@@ -84,6 +95,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule user not found, user = " + user));
     }
 
+    /**
+     * 비밀번호 확인
+     * @param id
+     * @return
+     */
     @Override
     public Schedule checkPw(Long id) {
         List<Schedule> result = jdbcTemplate.query("select * from schedule where id=?", scheduleRowMapperV2(), id);
@@ -91,16 +107,32 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule id not found, id = " + id));
     }
 
+    /**
+     * 일정 수정
+     * @param id
+     * @param contents
+     * @param user_name
+     * @return
+     */
     @Override
     public int updateSchedule(Long id, String contents, String user_name) {
         return jdbcTemplate.update("update schedule set contents=?, user_name=?, update_date=? where id=?", contents, user_name, LocalDateTime.now(), id);
     }
 
+    /**
+     * 일정 삭제
+     * @param id
+     * @return
+     */
     @Override
     public int deleteSchedule(Long id) {
         return jdbcTemplate.update("delete from schedule where id=?", id);
     }
 
+    /**
+     * 일정 등록 mapper
+     * @return
+     */
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
         return new RowMapper<ScheduleResponseDto>() {
 
@@ -120,6 +152,10 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         };
     }
 
+    /**
+     * mapper
+     * @return
+     */
     private RowMapper<Schedule> scheduleRowMapperV2() {
         return new RowMapper<Schedule>() {
 
